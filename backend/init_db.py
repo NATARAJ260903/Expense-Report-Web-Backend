@@ -9,7 +9,9 @@ def get_conn():
     return pymysql.connect(host=os.getenv("DB_HOST","127.0.0.1"),port=int(os.getenv("DB_PORT","3306")),user=os.getenv("DB_USER","root"),password=os.getenv("DB_PASSWORD",""),database=os.getenv("DB_NAME","expense_db"),cursorclass=pymysql.cursors.DictCursor,autocommit=True)
 
 def init_database():
-    schema=Path(__file__).resolve().parent/"db"/"schema.sql"
+    schema=Path("/app/db/schema.sql")
+    if not schema.exists():
+        schema=Path(__file__).resolve().parent/"db"/"schema.sql"
     if not schema.exists():
         schema=Path.cwd()/"db"/"schema.sql"
     if not schema.exists():
