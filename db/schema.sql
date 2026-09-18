@@ -9,6 +9,7 @@ CREATE TABLE employees (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(120) NOT NULL,
   email VARCHAR(200) NOT NULL UNIQUE,
+  password VARCHAR(128) NOT NULL,
   role ENUM('employee','manager','finance_admin') NOT NULL,
   manager_id INT NULL,
   department VARCHAR(80) NOT NULL,
@@ -46,12 +47,12 @@ CREATE TABLE approvals (
     REFERENCES employees(id) ON DELETE CASCADE
 );
 
-INSERT INTO employees (id,name,email,role,manager_id,department) VALUES
-(1,'Amit Employee','amit@beeja.com','employee',4,'Sales'),
-(2,'Neha Employee','neha@beeja.com','employee',4,'Operations'),
-(3,'Rahul Employee','rahul@beeja.com','employee',4,'Tech'),
-(4,'Priya Manager','priya@beeja.com','manager',NULL,'Operations'),
-(5,'Karan Finance','karan@beeja.com','finance_admin',NULL,'Finance');
+INSERT INTO employees (id,name,email,password,role,manager_id,department) VALUES
+(1,'Amit Employee','amit@beeja.com','employee123','employee',4,'Sales'),
+(2,'Neha Employee','neha@beeja.com','employee456','employee',4,'Operations'),
+(3,'Rahul Employee','rahul@beeja.com','rahul123','employee',4,'Tech'),
+(4,'Priya Manager','priya@beeja.com','manager123','manager',NULL,'Operations'),
+(5,'Karan Finance','karan@beeja.com','finance123','finance_admin',NULL,'Finance');
 
 INSERT INTO expenses
 (employee_id,title,category,amount,expense_date,receipt_filename,description,status,submitted_at)
