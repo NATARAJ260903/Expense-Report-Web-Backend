@@ -9,6 +9,7 @@ const demoAccounts={
 
 export default function LoginPage({onLogin}){
   const [email,setEmail]=useState(demoAccounts.employee);
+  const [password,setPassword]=useState("");
   const [role,setRole]=useState("employee");
   const [error,setError]=useState("");
   const [loading,setLoading]=useState(false);
@@ -25,7 +26,7 @@ export default function LoginPage({onLogin}){
     setError("");
     setLoading(true);
     try{
-      const d=await login(email.trim(),role);
+      const d=await login(email.trim(),password,role);
       onLogin(d.user);
     }catch(x){
       setError(x.message || "Login failed");
@@ -39,6 +40,8 @@ export default function LoginPage({onLogin}){
     <p>Sign in to manage your expense reports.</p>
     <label>Email</label>
     <input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoComplete="email"/>
+    <label>Password</label>
+    <input type="password" value={password} onChange={e=>setPassword(e.target.value)} required minLength={6} autoComplete="current-password"/>
     <label>Role</label>
     <select value={role} onChange={changeRole}>
       <option value="employee">Employee</option>
@@ -51,9 +54,9 @@ export default function LoginPage({onLogin}){
     {error&&<p className="error">{error}</p>}
     <div className="hint">
       <strong>Demo accounts</strong><br/>
-      Employee: amit@beeja.com<br/>
-      Manager: priya@beeja.com<br/>
-      Finance: karan@beeja.com
+      Employee: amit@beeja.com / employee123<br/>
+      Manager: priya@beeja.com / manager123<br/>
+      Finance: karan@beeja.com / finance123
     </div>
   </form></div>
 }
