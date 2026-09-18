@@ -10,8 +10,8 @@ export async function apiFetch(path,options={}){
   if(!res.ok) throw new Error(data.detail || `API error (${res.status})`);
   return data;
 }
-export async function login(email,role){
-  const data=await apiFetch("/auth/login",{method:"POST",body:JSON.stringify({email,role})});
+export async function login(email,password,role){
+  const data=await apiFetch("/auth/login",{method:"POST",body:JSON.stringify({email,password,role})});
   localStorage.setItem("token",data.token);
   localStorage.setItem("user",JSON.stringify(data.user));
   return data;
