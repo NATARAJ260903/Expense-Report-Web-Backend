@@ -5,27 +5,22 @@ from app.auth import create_token, get_current_user
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
-DEMO_PASSWORDS = {
-    "amit@beeja.com": "employee123",
-    "priya@beeja.com": "manager123",
-    "karan@beeja.com": "finance123",
-}
-
 @router.post("/login")
 def login(payload: LoginRequest):
     con = get_connection()
     try:
         with con.cursor() as cur:
             cur.execute(
-                """SELECT id,name,email,role,department,manager_id
+                """SELECT id,name,email,role,department,manager_id,password
                    FROM employees WHERE email=%s AND role=%s""",
                 (payload.email, payload.role)
             )
             user = cur.fetchone()
     finally:
         con.close()
-    if not user or DEMO_PASSWORDS.get(payload.email.lower()) != payload.password:
+    if not user or user["password"] != payload.password:
         raise HTTPException(status_code=401, detail="Invalid credentials")
+    user.pop("password", None)
     return {"token": create_token(user), "user": user}
 
 @router.get("/me")
