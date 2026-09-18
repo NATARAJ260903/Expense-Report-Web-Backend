@@ -31,11 +31,37 @@ def init_database():
             try:
                 with conn.cursor() as cur:
                     cur.execute("SHOW TABLES LIKE 'employees'")
-                    if cur.fetchone():
-                        print("Database already initialized; skipping schema import.")
-                        return
-                    for statement in statements: cur.execute(statement)
-                print(f"Database schema initialized successfully in {os.getenv('DB_NAME','expense_db')}.")
+                    if not cur.fetchone():
+                        for statement in statements:
+                            cur.execute(statement)
+                        print(f"Database schema initialized successfully in {os.getenv('DB_NAME','expense_db')}.")
+
+                    # Ensure demo accounts exist even when the database was initialized earlier.
+                    cur.execute("SELECT id FROM employees WHERE email=%s", ("priya@beeja.com",))
+                    priya = cur.fetchone()
+                    if not priya:
+                        cur.execute(
+                            "INSERT INTO employees (id,name,email,role,manager_id,department) VALUES (4,%s,%s,%s,NULL,%s)",
+                            ("Priya Manager", "priya@beeja.com", "manager", "Operations"),
+                        )
+                        priya_id = 4
+                    else:
+                        priya_id = priya["id"]
+
+                    demo_users = [
+                        (1, "Amit Employee", "amit@beeja.com", "employee", priya_id, "Sales"),
+                        (2, "Neha Employee", "neha@beeja.com", "employee", priya_id, "Operations"),
+                        (3, "Rahul Employee", "rahul@beeja.com", "employee", priya_id, "Tech"),
+                        (5, "Karan Finance", "karan@beeja.com", "finance_admin", None, "Finance"),
+                    ]
+                    for uid, name, email, role, manager_id, department in demo_users:
+                        cur.execute("SELECT id FROM employees WHERE email=%s", (email,))
+                        if not cur.fetchone():
+                            cur.execute(
+                                "INSERT INTO employees (id,name,email,role,manager_id,department) VALUES (%s,%s,%s,%s,%s,%s)",
+                                (uid, name, email, role, manager_id, department),
+                            )
+                    print("Demo accounts verified.")
                 return
             finally: conn.close()
         except Exception as exc:
