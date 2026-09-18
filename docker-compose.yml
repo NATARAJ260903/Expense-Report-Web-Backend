@@ -1,0 +1,15 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: expense-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: expense_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - expense_mysql:/var/lib/mysql
+
+volumes:
+  expense_mysql:
