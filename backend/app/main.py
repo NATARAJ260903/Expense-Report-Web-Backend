@@ -4,6 +4,10 @@ from app.routes import auth, expenses, manager, finance
 
 app = FastAPI(title="Expense Report Management API")
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
