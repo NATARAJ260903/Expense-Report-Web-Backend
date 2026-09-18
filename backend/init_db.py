@@ -21,10 +21,7 @@ def get_conn():
 
 
 def init_database():
-    schema = Path(__file__).resolve().parent.parent.joinpath("db", "schema.sql")
-    if not schema.exists():
-        schema = Path(__file__).resolve().parent.joinpath("schema.sql")
-
+    schema = Path(__file__).resolve().parents[2] / "db" / "schema.sql"
     sql = schema.read_text(encoding="utf-8")
     statements = [part.strip() for part in sql.split(";") if part.strip()]
 
