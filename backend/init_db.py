@@ -11,6 +11,8 @@ def get_conn():
 def init_database():
     schema=Path(__file__).resolve().parent/"db"/"schema.sql"
     if not schema.exists():
+        schema=Path.cwd()/"db"/"schema.sql"
+    if not schema.exists():
         raise FileNotFoundError(f"Database schema not found: {schema}")
     sql=schema.read_text(encoding="utf-8")
     statements=[]
