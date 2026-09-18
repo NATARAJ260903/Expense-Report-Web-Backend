@@ -2,9 +2,9 @@ import React,{useState} from "react";
 import {login} from "../api";
 
 const demoAccounts={
-  employee:"amit@employee.com",
-  manager:"manager@company.com",
-  finance_admin:"finance@company.com"
+  employee:"amit@beeja.com",
+  manager:"priya@beeja.com",
+  finance_admin:"karan@beeja.com"
 };
 
 export default function LoginPage({onLogin}){
@@ -51,9 +51,9 @@ export default function LoginPage({onLogin}){
     {error&&<p className="error">{error}</p>}
     <div className="hint">
       <strong>Demo accounts</strong><br/>
-      Employee: amit@employee.com<br/>
-      Manager: manager@company.com<br/>
-      Finance: finance@company.com
+      Employee: amit@beeja.com<br/>
+      Manager: priya@beeja.com<br/>
+      Finance: karan@beeja.com
     </div>
   </form></div>
 }
