@@ -52,11 +52,5 @@ export default function LoginPage({onLogin}){
       {loading ? "Logging in..." : "Login"}
     </button>
     {error&&<p className="error">{error}</p>}
-    <div className="hint">
-      <strong>Demo accounts</strong><br/>
-      Employee: amit@beeja.com / employee123<br/>
-      Manager: priya@beeja.com / manager123<br/>
-      Finance: karan@beeja.com / finance123
-    </div>
   </form></div>
 }
