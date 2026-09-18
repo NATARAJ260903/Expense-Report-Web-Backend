@@ -9,6 +9,7 @@ ExpenseStatus = Literal["draft","submitted","approved","rejected","paid"]
 class LoginRequest(BaseModel):
     email: EmailStr
     role: RoleType
+    password: str = Field(..., min_length=6, max_length=128)
 
 class ExpenseCreate(BaseModel):
     title: str = Field(..., min_length=2, max_length=200)
