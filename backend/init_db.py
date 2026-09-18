@@ -21,9 +21,24 @@ def get_conn():
 
 
 def init_database():
-    schema = Path(__file__).resolve().parents[2] / "db" / "schema.sql"
+    schema = Path(__file__).resolve().parents[1] / "db" / "schema.sql"
     sql = schema.read_text(encoding="utf-8")
-    statements = [part.strip() for part in sql.split(";") if part.strip()]
+
+    # The application connects directly to DB_NAME (for Railway this is
+    # usually "railway"), while schema.sql is also used locally with
+    # "expense_db". Skip the database-selection statements from schema.sql
+    # and create the tables inside the database already selected above.
+    statements = []
+    for part in sql.split(";"):
+        statement = part.strip()
+        if not statement:
+            continue
+        upper = statement.upper()
+        if upper.startswith("CREATE DATABASE"):
+            continue
+        if upper.startswith("USE EXPENSE_DB"):
+            continue
+        statements.append(statement)
 
     for attempt in range(1, 31):
         try:
@@ -38,7 +53,10 @@ def init_database():
                     for statement in statements:
                         cur.execute(statement)
 
-                print("Database schema initialized successfully.")
+                print(
+                    f"Database schema initialized successfully in "
+                    f"{os.getenv('DB_NAME', 'expense_db')}."
+                )
                 return
             finally:
                 conn.close()
